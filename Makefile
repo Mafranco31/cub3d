@@ -6,7 +6,7 @@
 #    By: mafranco <mafranco@student.barcelona.>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/11 15:02:38 by mafranco          #+#    #+#              #
-#    Updated: 2024/05/15 13:17:44 by mafranco         ###   ########.fr        #
+#    Updated: 2024/05/15 13:24:42 by mafranco         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,7 +51,6 @@ RESET	=	\033[0m
 
 all:
 	@make -C $(LIBMLX_PATH)
-	#@echo "$(YELLOW)libft compiling...$(RESET)"
 	@make -C $(LIBFT_PATH)
 	@make $(NAME)
 

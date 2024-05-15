@@ -31,10 +31,17 @@ static int	maketable(t_data *w1, int fd)
 
 	i = 0;
 	buf = get_next_line(fd);
+	if (!buf)
+		return (0);
+	while (buf && !ft_strchr(buf, 49))
+	{
+		free(buf);
+		buf = get_next_line(fd);
+	}
 	w1->lenght = ft_strlen(buf) - 1;
 	line = NULL;
 	buf2 = NULL;
-	while (buf)
+	while (buf && ft_strchr(buf, 49))
 	{
 		i++;
 		buf2 = ft_strdup(line);
@@ -46,6 +53,8 @@ static int	maketable(t_data *w1, int fd)
 			return (0);
 		buf = get_next_line(fd);
 	}
+	if (buf)
+		free(buf);
 	w1->table = ft_split(line, '\n');
 	free(line);
 	return (i);
@@ -90,13 +99,18 @@ int	initdata(t_data *w1)
 	fd = open(w1->path, O_RDONLY);
 	if (fd == -1)
 	{
-		ft_printf("Error\nOPENING FILE FAILED");
+		free(w1->path);
+		ft_printf("Error\nOPENING FILE FAILED\n");
 		return (0);
 	}
 	w1->width = maketable(w1, fd);
 	close(fd);
 	if (w1->width == 0)
-		return (0);
+	{
+		free(w1->path);
+		ft_printf("Map is empty\n");
+		return (1);
+	}
 	printf("lenght == %d, width == %d\n", w1->lenght, w1->width);
 	close(fd);
 	w1->count = 0;

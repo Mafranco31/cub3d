@@ -66,6 +66,11 @@ static int	checkarg(int argc, char **argv)
 		return (1);
 	}
 	str = ft_substr(argv[1], ft_strlen(argv[1]) - 4, 4);
+	if (!str)
+	{
+		ft_printf("error ft_substr\n");
+		return (1);
+	}
 	if (ft_strncmp(str, ".cub", 4) != 0)
 	{
 		free(str);
@@ -82,11 +87,11 @@ int	main(int argc, char **argv)
 
 	ft_printf("Program start\n");
 	if (checkarg(argc, argv) == 1)
-		return (0);
+		return (1);
 	ft_printf("Arg checked\n");
 	w1.path = ft_strdup(argv[1]);
 	if (initdata(&w1) == 1)
-		return (0);
+		return (1);
 	ft_printf("Data initialized\n");
 	w1.win = mlx_new_window(w1.mlx, w1.lenght * 45, w1.width * 45, "./so_long");
 	if (w1.win == NULL)
