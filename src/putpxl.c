@@ -92,7 +92,7 @@ int expose(t_data *w1)
             if(drawEnd >= w1->width)
                 drawEnd = w1->width - 1;
 
-            int ystart = drawStart;
+            //int ystart = drawStart;
             /*while (ystart > drawEnd)
             {
                 //mlx_pixel_put(w1->mlx, w1->win, x, ystart, 255);
@@ -100,7 +100,7 @@ int expose(t_data *w1)
                 //mlx_pixel_put(w1->mlx, w1->win, x, 40, 255);
                 ystart -= 1;
             }*/
-            mlx_put_image_to_window(w1->mlx, w1->win, w1->img.grass, x, ystart);
+            //mlx_put_image_to_window(w1->mlx, w1->win, w1->img.grass, x, ystart);
 
             x++;
         }

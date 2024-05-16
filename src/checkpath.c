@@ -9,7 +9,7 @@
 /*   Updated: 2023/09/18 20:32:36 by mafranco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
+/*
 #include "../include/cubed.h"
 
 static int	checkgete(char **table, int y, int x, t_data *w1)
@@ -111,4 +111,4 @@ int	checkpath(t_data *w1, int y, int x, int i)
 		y++;
 	}
 	return (0);
-}
+}*/

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   so_long.c                                          :+:      :+:    :+:   */
+/*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mafranco <mafranco@student.barcelona.>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,42 +12,19 @@
 
 #include "../include/cubed.h"
 
-/*static void	putimg2(t_data *w1, char c, int y, int x)
-{
-	if (c == '0')
-		mlx_put_image_to_window(w1->mlx, w1->win,
-			w1->img.grass, x * 45, y * 45);
-	if (c == '1')
-		mlx_put_image_to_window(w1->mlx, w1->win,
-			w1->img.fence, x * 45, y * 45);
-	if (c == 'C')
-		mlx_put_image_to_window(w1->mlx, w1->win,
-			w1->img.hotdog, x * 45, y * 45);
-	if (c == 'E')
-		mlx_put_image_to_window(w1->mlx, w1->win,
-			w1->img.kennel, x * 45, y * 45);
-	if (c == 'P')
-		mlx_put_image_to_window(w1->mlx, w1->win, w1->img.dog, x * 45, y * 45);
-}
-
-int	expose(t_data *w1)
+int	ft_isspace(char *str)
 {
 	int	i;
-	int	j;
 
 	i = 0;
-	while (w1->table[i])
+	while(str[i])
 	{
-		j = 0;
-		while (w1->table[i][j])
-		{
-			putimg2(w1, w1->table[i][j], i, j);
-			j++;
-		}
+		if (!(str[i] >= 9 && str[i] <= 13) || str[i] != 32)
+			return (0);
 		i++;
 	}
-	return (0);
-}*/
+	return (1);
+}
 
 int	mouseget(t_data *w1)
 {
@@ -90,19 +67,29 @@ int	main(int argc, char **argv)
 		return (1);
 	ft_printf("Arg checked\n");
 	w1.path = ft_strdup(argv[1]);
-	if (initdata(&w1) == 1)
+	w1.img = (void*)malloc(sizeof(t_img));
+	if (!w1.img)
+	{
+		ft_putstr_fd("Error: malloc\n", 2);
 		return (1);
+	}
+	if (initdata(&w1) == 1)
+	{
+		free(w1.img);
+		return (1);
+	}
 	ft_printf("Data initialized\n");
 	w1.win = mlx_new_window(w1.mlx, w1.lenght * 45, w1.width * 45, "./so_long");
 	if (w1.win == NULL)
 		return (endbefore(&w1, "CREATING WINDOW FAILED"));
 	ft_printf("Window created\n");
-	if (makeimg(&w1) == 1)
-		return (end(&w1, "CREATING IMAGES FAILED", 1));
+	/*if (makeimg(&w1) == 1)
+		return (end(&w1, "CREATING IMAGES FAILED", 1));*/
 	ft_printf("Images created\n");
+
 	mlx_key_hook(w1.win, presskey, &w1);
 	//mlx_expose_hook(w1.win, expose, &w1);
-	mlx_hook(w1.win, 17, 1L << 17, mouseget, &w1);
-	mlx_loop(w1.mlx);
-	ft_printf("Program end\n");
+	//mlx_hook(w1.win, 17, 1L << 17, mouseget, &w1);
+	//mlx_loop(w1.mlx);
+	return (end(&w1, "Program end\n", 0));
 }

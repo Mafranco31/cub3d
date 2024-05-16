@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SO_LONG_H
-# define SO_LONG_H
+#ifndef CUBED_H
+# define CUBED_H
 
 # include "mlx.h"
 # include <stdio.h>
@@ -23,16 +23,16 @@
 
 typedef struct s_img
 {
-	char	*pathdog;
-	char	*pathgrass;
-	char	*pathkennel;
-	char	*pathhotdog;
-	char	*pathfence;
-	void	*dog;
-	void	*fence;
-	void	*grass;
-	void	*hotdog;
-	void	*kennel;
+	char	*pathN;
+	char	*pathS;
+	char	*pathE;
+	char	*pathW;
+	char	*pathTop;
+	char	*pathBot;
+	void	*N;
+	void	*S;
+	void	*E;
+	void	*W;
 	int		h;
 	int		w;
 	int		dogx;
@@ -45,12 +45,14 @@ typedef struct s_data
 	void	*win;
 	int		lenght;
 	int		width;
-	t_img	img;
+	t_img	*img;
 	int		count;
 	char	**table;
 	int		moove;
 	char	*path;
 }		t_data;
+
+int		ft_isspace(char *str);
 
 int		initdata(t_data *w1);
 
@@ -68,10 +70,12 @@ char	**create1tab(t_data *w1);
 
 int		checkpath(t_data *w1, int y, int x, int i);
 
-int		makeimg(t_data *w1);
+int		makeimg(t_data *w1, int fd);
 
 int		endbefore(t_data *w1, char *str);
 
 int		expose(t_data *w1);
+
+void	free_img_str(t_data *w1);
 
 #endif

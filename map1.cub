@@ -1,6 +1,14 @@
+N ./img/grass.xpm
 
+SO ./img/fence.xpm
 
+EA ./img/fence.xpm
 
+WE ./img/fence.xpm
+
+F 255,0,0
+
+C   255,0,0
 
  1111111
 11000011

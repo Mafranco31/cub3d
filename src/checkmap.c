@@ -53,7 +53,6 @@ char	**create1tab(t_data *w1)
 
 int	check_around(t_data *w1, char **t, int i, int j)
 {
-	//printf("i == %d, j == %d\n", i, j);
 	if (i == 0 || j == 0 || i == w1->width - 1 || j == w1->lenght - 1)// check if width is i and lenght is j
 		return (1);
 	if (!t[i - 1][j - 1] || !t[i - 1][j] || !t[i - 1][j + 1])
@@ -82,10 +81,8 @@ static int	checkborder(t_data *w1, char **table)
 		j = 0;
 		while (table[i][j])
 		{
-	//		printf("test\n");
-			if (table[i][j] != 49 && table[i][j] != 32)//do with N, S, W, E too
+			if (table[i][j] != 49 && table[i][j] != 32)
 			{
-	//			printf("atest\n");
 				if (check_around(w1, table, i, j) == 1)
 					return (1);
 			}
@@ -96,32 +93,36 @@ static int	checkborder(t_data *w1, char **table)
 	return (0);
 }
 
-/*static int	checklen(char **table)
+int	initmap(t_data *w1, int k)
 {
 	int	i;
 	int	j;
-	int	k;
 
 	i = 0;
-	while (table[0][i])
-		i++;
-	j = 1;
-	while (table[j])
+	while (w1->table[i])
 	{
-		k = 0;
-		while (table[j][k])
-			k++;
-		if (k != i)
-			return (1);
-		j++;
+		j = 0;
+		while (w1->table[i][j])
+		{
+			if (w1->table[i][j] == 78 || w1->table[i][j] == 83 || w1->table[i][j] == 69 || w1->table[i][j] == 87)
+			{
+				if (k == 1)
+					return (endbefore(w1, "Only one starting position in the map is posible"));
+				k = 1;
+			}
+			else if (w1->table[i][j] != 48 && w1->table[i][j] != 49 && w1->table[i][j] != 32)
+				return (endbefore(w1, "You can only put 0 / 1 / N / S / E / W in your map"));
+			j++;
+		}
+		i++;
 	}
+	if (k == 0)
+		return (endbefore(w1, "Map needs the starting point as N / S / E / W"));
 	return (0);
-}*/
+}
 
 int	checkmap(t_data *w1)
 {
-	//if (checklen(w1->table) == 1)
-	//	return (endbefore(w1, "MAP IS NOT RECTANGULAR"));
 	if (checkborder(w1, w1->table) == 1)
 		return (endbefore(w1, "MAP SHOULD HAVE FENCE IN BORDERS"));
 	return (initmap(w1, 0));
