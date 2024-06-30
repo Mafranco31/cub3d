@@ -3,146 +3,87 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafranco <mafranco@student.barcelona.>     +#+  +:+       +#+        */
+/*   By: dlitran <dlitran@student.42barcelona.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 14:57:31 by mafranco          #+#    #+#             */
-/*   Updated: 2023/11/22 15:20:53 by mafranco         ###   ########.fr       */
+/*   Updated: 2024/06/11 10:31:57 by dlitran          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cubed.h"
 
-static int	maketable(t_data *w1, int fd)
+int	create_mlx_image(t_data *w1, int y)
 {
-	char	*buf;
-	char	*line;
-	char	*buf2;
-	int		i;
-
-	i = 0;
-
-	buf = get_next_line(fd);
-	if (!buf)
-	{
-		w1->table = NULL;
-		return (1);
-	}
-	while (buf && !ft_strchr(buf, 49))
-	{
-		free(buf);
-		buf = get_next_line(fd);
-	}
-	ft_printf("Test");
-	w1->lenght = ft_strlen(buf) - 1;
-	line = NULL;
-	buf2 = NULL;
-	while (buf && ft_strchr(buf, 49))
-	{
-		i++;
-		buf2 = ft_strdup(line);
-		free(line);
-		line = ft_strjoin(buf2, buf);
-		free(buf);
-		free(buf2);
-		if (line == NULL)
-			return (0);
-		buf = get_next_line(fd);
-	}
-	if (buf)
-		free(buf);
-	w1->table = ft_split(line, '\n');
-	free(line);
-	return (i);
-}
-
-int	err_creating_mlx(t_data *w1, int nb, char *str)
-{
-	if (nb > 1)
-		mlx_destroy_image(w1->mlx, w1->img->N);
-	if (nb > 2)
-		mlx_destroy_image(w1->mlx, w1->img->S);
-	if (nb > 3)
-		mlx_destroy_image(w1->mlx, w1->img->E);	
-	ft_putstr_fd(str, 2);
-	return (1);
-}
-
-
-int	create_mlx_image(t_data *w1)
-{
-	int	y = 45;
-
 	w1->img->h = y;
-	w1->img->w = y;
-
-	w1->img->N = mlx_xpm_file_to_image(w1->mlx,
-			w1->img->pathN, &(w1->img->h), &(w1->img->w));
-	if (!w1->img->N)
-		return (err_creating_mlx(w1, 1, "Error: mlx failed to create North oriented wall image\n"));
-
-	w1->img->S = mlx_xpm_file_to_image(w1->mlx,
-			w1->img->pathS, &(w1->img->h), &(w1->img->w));
-	if (!w1->img->S)
-		return (err_creating_mlx(w1, 2, "Error: mlx failed to create South oriented wall image\n"));
-
-	w1->img->E = mlx_xpm_file_to_image(w1->mlx,
-			w1->img->pathE, &(w1->img->h), &(w1->img->w));
-	if (!w1->img->E)
-		return (err_creating_mlx(w1, 3, "Error: mlx failed to create East oriented wall image\n"));
-
-	w1->img->W = mlx_xpm_file_to_image(w1->mlx,
-			w1->img->pathW, &(w1->img->h), &(w1->img->w));
-	if (!w1->img->W)
-		return (err_creating_mlx(w1, 4, "Error: mlx failed to create West oriented wall image\n"));
+	w1->img->l = y;
+	w1->img->n = mlx_xpm_file_to_image(w1->mlx,
+			w1->img->pathn, &(w1->img->h), &(w1->img->l));
+	if (!w1->img->n)
+		return (err_creating_mlx(w1, 1, "Error: mlx failed to \
+create North oriented wall image\n"));
+	w1->img->s = mlx_xpm_file_to_image(w1->mlx,
+			w1->img->paths, &(w1->img->h), &(w1->img->l));
+	if (!w1->img->s)
+		return (err_creating_mlx(w1, 2, "Error: mlx failed to \
+create South oriented wall image\n"));
+	w1->img->e = mlx_xpm_file_to_image(w1->mlx,
+			w1->img->pathe, &(w1->img->h), &(w1->img->l));
+	if (!w1->img->e)
+		return (err_creating_mlx(w1, 3, "Error: mlx failed to \
+create East oriented wall image\n"));
+	w1->img->we = mlx_xpm_file_to_image(w1->mlx,
+			w1->img->pathw, &(w1->img->h), &(w1->img->l));
+	if (!w1->img->we)
+		return (err_creating_mlx(w1, 4, "Error: mlx failed to \
+create West oriented wall image\n"));
 	return (0);
 }
 
-int	add_element(t_data *w1, char *str)
+int	check_unique(char **ptr, char *buf, char *str)
 {
-	char	*buf;
+	int	i;
 
-	if (ft_strlen(str) < 3)
+	i = 0;
+	while (buf[i] && !ft_isspace_char(buf[i]))
+		i++;
+	if (ft_isspace_char(buf[i]))
+		return (err_msg_elements(buf, 1, 1));
+	if (*ptr)
 	{
-		ft_putstr_fd(".cub file should contain 6 elements before map description :\n", 2);
-		ft_putstr_fd("- NO [path_to_the_North_Oriented_Wall_Image],\n", 2);
-		ft_putstr_fd("- SO [path_to_the_South_Oriented_Wall_Image],\n", 2);
-		ft_putstr_fd("- EA [path_to_the_East_Oriented_Wall_Image],\n", 2);
-		ft_putstr_fd("- WE [path_to_the_West_Oriented_Wall_Image],\n", 2);
-		ft_putstr_fd("- F [RGB code of floor color as (255,0,0)],\n", 2);
-		ft_putstr_fd("- C [RGB code of sky color as (255,0,0)]\n\n", 2);
-		ft_putstr_fd("And no more elements !", 2);
+		ft_putstr_fd("Error\nElement in double\n", 2);
+		free(buf);
+		free(str);
 		return (1);
 	}
+	*ptr = buf;
+	return (0);
+}
+
+int	add_element(t_data *w1, char *str, char *buf)
+{
 	buf = ft_strtrim(str + 2, "\t\n\v\f\r ");
 	if (!buf)
 	{
-		ft_putstr_fd("Error: ft_strtrim\n", 2);
+		ft_putstr_fd("Error\nError in : ft_strtrim\n", 2);
+		free(str);
 		return (1);
 	}
 	if (!ft_strncmp(str, "NO ", 3))
-		w1->img->pathN = buf;
+		return (check_unique(&w1->img->pathn, buf, str));
 	else if (!ft_strncmp(str, "SO ", 3))
-		w1->img->pathS = buf;
+		return (check_unique(&w1->img->paths, buf, str));
 	else if (!ft_strncmp(str, "EA ", 3))
-		w1->img->pathE = buf;
+		return (check_unique(&w1->img->pathe, buf, str));
 	else if (!ft_strncmp(str, "WE ", 3))
-		w1->img->pathW = buf;
+		return (check_unique(&w1->img->pathw, buf, str));
 	else if (!ft_strncmp(str, "F ", 2))
-		w1->img->pathBot = buf;
+		return (get_color_char_to_int(&w1->img->color_bot, buf, str));
 	else if (!ft_strncmp(str, "C ", 2))
-		w1->img->pathTop = buf;
+		return (get_color_char_to_int(&w1->img->color_top, buf, str));
 	else
 	{
-		ft_putstr_fd(".cub file should contain 6 elements before map description :\n", 2);
-		ft_putstr_fd("- NO [path_to_the_North_Oriented_Wall_Image],\n", 2);
-		ft_putstr_fd("- SO [path_to_the_South_Oriented_Wall_Image],\n", 2);
-		ft_putstr_fd("- EA [path_to_the_East_Oriented_Wall_Image],\n", 2);
-		ft_putstr_fd("- WE [path_to_the_West_Oriented_Wall_Image],\n", 2);
-		ft_putstr_fd("- F [RGB code of floor color as (255,0,0)],\n", 2);
-		ft_putstr_fd("- C [RGB code of sky color as (255,0,0)]\n\n", 2);
-		ft_putstr_fd("And no more elements !\n", 2);
 		free(buf);
-		return (1);
+		return (err_msg_elements(str, 1, 1));
 	}
 	return (0);
 }
@@ -158,18 +99,17 @@ int	makeimg(t_data *w1, int fd)
 	{
 		if (ft_strlen(buf) > 1 && !ft_isspace(buf))
 		{
-			if (add_element(w1, buf) == 1)
-			{
-				free(buf);
+			if (ft_strlen(buf) < 3)
+				return (err_msg_elements(buf, 1, 1));
+			if (add_element(w1, buf, NULL) == 1)
 				return (1);
-			}
 			count += 1;
 		}
 		free(buf);
 		if (count < 6)
 			buf = get_next_line(fd);
 	}
-	return (create_mlx_image(w1));
+	return (create_mlx_image(w1, w1->size));
 }
 
 int	initdata(t_data *w1)
@@ -180,38 +120,18 @@ int	initdata(t_data *w1)
 	if (fd == -1)
 	{
 		free(w1->path);
-		ft_putstr_fd("Error: open argument\n", 2);
-		return (0);
-	}
-	w1->mlx = mlx_init();
-	
-	if (makeimg(w1, fd) == 1)
-	{
-		free(w1->path);
-		free_img_str(w1);
-		//free(w1->img);
+		ft_putstr_fd("Error\nError opening file\n", 2);
 		return (1);
 	}
-	//write(1, "tess", 4);
+	if (init_paths(w1, fd) == 1)
+		return (1);
 	w1->width = maketable(w1, fd);
 	close(fd);
 	if (w1->width == 0)
-	{
-		free(w1->path);
-		//free(w1->img);
-		free_img_str(w1);
-		ft_putstr_fd("Error: Map is empty\n", 2);
-		return (1);
-	}
-	//printf("lenght == %d, width == %d\n", w1->lenght, w1->width);
-	close(fd);
-	w1->count = 0;
-	w1->moove = 0;
-	if (w1->table == NULL)
-		return (endbefore(w1, "Error: malloc failed\n"));
+		return (err_width_zero(w1));
 	if (checkmap(w1) == 1)
 		return (1);
 	if (w1->mlx == NULL)
-		return (endbefore(w1, "Error: mlx failed to initialise\n"));
+		return (endbefore(w1, "Error\nMlx failed to initialise\n"));
 	return (0);
 }

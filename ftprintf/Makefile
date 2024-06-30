@@ -6,7 +6,7 @@
 #    By: mafranco <mafranco@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/27 13:06:34 by mafranco          #+#    #+#              #
-#    Updated: 2024/05/15 13:17:03 by mafranco         ###   ########.fr        #
+#    Updated: 2024/06/29 15:36:35 by mafranco         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ RESET	=	\033[0m
 all:	$(NAME)
 
 %.o: %.c $(LIB)
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME): $(OBJ) $(LIB)
 	@ar rcs $(NAME) $(OBJ)

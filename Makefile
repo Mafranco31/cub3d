@@ -6,11 +6,11 @@
 #    By: mafranco <mafranco@student.barcelona.>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/11 15:02:38 by mafranco          #+#    #+#              #
-#    Updated: 2024/05/15 13:24:42 by mafranco         ###   ########.fr        #
+#    Updated: 2024/06/29 15:35:19 by mafranco         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME	=	cubed
+NAME	=	cub3D
 
 LIB	=	include/cubed.h
 
@@ -29,7 +29,7 @@ LIBMLX_LIB	=	$(addprefix $(LIBMLX_PATH), $(LIBMLX))
 SRC_DIR	=	src
 SRC	=	$(wildcard $(SRC_DIR)/*.c)
 
-MLX_FLAG	=	-lmlx -lX11 -lXext
+MLX_FLAG	=	-lm -lX11 -lXext -L./mlx -lmlx
 
 MLX_EX	=	$(MLX_LIB) $(MLX_FLAG)
 
@@ -52,6 +52,7 @@ RESET	=	\033[0m
 all:
 	@make -C $(LIBMLX_PATH)
 	@make -C $(LIBFT_PATH)
+	@make -C $(LIBPF_PATH)
 	@make $(NAME)
 
 $(NAME): $(OBJ)
@@ -60,13 +61,14 @@ $(NAME): $(OBJ)
 	@echo "$(GREEN)$(NAME) created$(RESET)"
 
 clean:
-	@$(RM) -r $(OBJ_DIR)
+	@$(RM) -r $(SRC_DIR)/*.o
 	@echo "$(YELLOW)objects of $(NAME) removed$(RESET)"
 
 fclean:	clean
 	@$(RM) $(NAME)
 	@make clean -C $(LIBFT_PATH)
 	@make clean -C $(LIBMLX_PATH)
+	@make clean -C $(LIBPF_PATH)
 	@echo "$(YELLOW)$(NAME) removed$(RESET)"
 
 re:	fclean all
